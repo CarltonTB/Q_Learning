@@ -1,6 +1,7 @@
 import unittest
 from q_learning import *
 from q_learning_agent import *
+from q_learning_utils import *
 
 
 class QLearningTests(unittest.TestCase):
@@ -27,8 +28,14 @@ class QLearningTests(unittest.TestCase):
         self.assertEqual('q', test_problem2[1][0])
         self.assertEqual('11', test_problem2[1][1])
 
+        # problem = generate_problem_from_input("12,15,8,6,p")
+        # print(convert_board_to_string(problem[0]))
+        #
+        # problem2 = generate_problem_from_input("13,4,5,3,q,11")
+        # print(convert_board_to_string(problem2[0]))
+
     def test_get_next_action(self):
-        agent = QLearningAgent(0.1, 0.1, 0.2, -0.1)
+        agent = QLearningAgent(0.1, 0, 0.2, -0.1)
         test_problem = generate_problem_from_input("12,15,8,6,p")
         board = test_problem[0]
         agent.current_square = board[3][1]
@@ -49,9 +56,29 @@ class QLearningTests(unittest.TestCase):
         reward = agent.take_action(action, board)
         agent.do_q_update(action, reward)
         self.assertEqual(-0.1, round(reward, 1))
-        # TODO: figure out how to test this well
 
+        action = "NORTH"
+        reward = agent.take_action(action, board)
+        agent.do_q_update(action, reward)
+        self.assertEqual(-0.1, round(reward, 1))
 
+        reward = agent.take_action(action, board)
+        agent.do_q_update(action, reward)
+        self.assertEqual(-0.1, round(reward, 1))
+
+        reward = agent.take_action(action, board)
+        agent.do_q_update(action, reward)
+        self.assertEqual(-0.1, round(reward, 1))
+
+        action = "EXIT"
+        reward = agent.take_action(action, board)
+        agent.do_q_update(action, reward)
+        self.assertEqual(99.9, round(reward, 1))
+
+        # exit_q_string = convert_q_values_for_square_to_string(agent.last_square)
+        # print(exit_q_string)
+        # exit_q_string2 = convert_q_values_for_square_to_string(board[3][1])
+        # print(exit_q_string2)
 
 
 if __name__ == '__main__':
