@@ -2,7 +2,7 @@
 # Author: Carlton Brady
 
 from enum import Enum
-
+from q_learning_agent import *
 
 # Unicode for the arrow characters
 CONST_DIRECTIONAL_CHARACTERS = {
@@ -23,7 +23,7 @@ class SquareType(Enum):
 
 class Square:
 
-    def __init__(self, location, type):
+    def __init__(self, location, type, reward=0):
         self.type = type
         self.location = location
         self.q_values = {
@@ -32,6 +32,7 @@ class Square:
             "EAST": 0,
             "WEST": 0
         }
+        self.reward = reward
 
 
 def generate_problem_from_input(input):
@@ -66,9 +67,15 @@ def generate_problem_from_input(input):
 
     # Add the start square in the same place every time
     board[3][1].type = SquareType.START
+    # Add goal squares
     board[goal1_indices[0]][goal1_indices[1]].type = SquareType.GOAL
+    board[goal1_indices[0]][goal1_indices[1]].reward = 100
     board[goal2_indices[0]][goal2_indices[1]].type = SquareType.GOAL
+    board[goal2_indices[0]][goal2_indices[1]].reward = 100
+    # Add forbidden square
     board[forbidden_indices[0]][forbidden_indices[1]].type = SquareType.FORBIDDEN
+    board[forbidden_indices[0]][forbidden_indices[1]].reward = -100
+    # Add wall square
     board[wall_location[0]][wall_location[1]].type = SquareType.WALL
     return board, output_type
 
@@ -78,7 +85,6 @@ def compute_board_indices_from_location(location):
         i = 4 - (location // 4)
     else:
         i = 3 - (location // 4)
-
     j = (location % 4)-1
     return i, j
 
@@ -97,7 +103,16 @@ def convert_board_to_string(board):
     return board_string
 
 
-
+def learn_q_values(board):
+    agent = QLearningAgent(0.1, 0.1, 0.2, -0.1)
+    # Start at the starting square
+    agent.current_square = board[3][1]
+    # take an action
+    # action = agent.get_next_action()
+    # reward =
+    # receive a sample transition
+    # update Q(s,a) for that action
+    # repeat until convergence or 10,000 iterations
 
 # problem = generate_problem_from_input("12,15,8,6,p")
 # print(convert_board_to_string(problem[0]))
