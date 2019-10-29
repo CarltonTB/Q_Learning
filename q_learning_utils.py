@@ -72,3 +72,10 @@ def convert_q_values_for_square_to_string(square):
 
     return q_value_string
 
+
+def print_all_q_values_for_board(board):
+    for row in board:
+        for square in row:
+            print("location: " + str(square.location))
+            print("Q-values:")
+            print(convert_q_values_for_square_to_string(square))

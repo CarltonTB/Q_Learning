@@ -55,17 +55,19 @@ def learn_q_values(board):
     agent = QLearningAgent(0.1, 0.1, 0.2, -0.1)
     # Start at the starting square
     agent.current_square = board[3][1]
-    for iteration in range(10000):
+    print("Agent is learning Q-values...")
+    # TODO: check convergence and stop before 10000 iterations if convergence happens before then
+    for iteration in range(100000):
         # take an action
         action = agent.get_next_action()
+        # print(action)
+        # print(str(agent.current_square.location))
         reward = agent.take_action(action, board)
         # receive a sample transition and do q update
         agent.do_q_update(action, reward)
 
-    print(convert_q_values_for_square_to_string(board[3][1]))
 
-
-agent = QLearningAgent(0.1, 0.1, 0.2, -0.1)
 test_problem = generate_problem_from_input("12,15,8,6,p")
 board = test_problem[0]
 learn_q_values(board)
+print_all_q_values_for_board(board)

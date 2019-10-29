@@ -51,7 +51,7 @@ class QLearningTests(unittest.TestCase):
         test_problem = generate_problem_from_input("12,15,8,6,p")
         board = test_problem[0]
         agent.current_square = board[3][1]
-        action = agent.get_next_action()
+
         action = "EAST"
         reward = agent.take_action(action, board)
         agent.do_q_update(action, reward)
@@ -73,7 +73,8 @@ class QLearningTests(unittest.TestCase):
         action = "EXIT"
         reward = agent.take_action(action, board)
         agent.do_q_update(action, reward)
-        self.assertEqual(99.9, round(reward, 1))
+        self.assertEqual(100, round(reward, 1))
+        self.assertEqual(agent.current_square.location, 2)
 
         # exit_q_string = convert_q_values_for_square_to_string(agent.last_square)
         # print(exit_q_string)
