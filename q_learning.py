@@ -70,4 +70,5 @@ def learn_q_values(board):
 test_problem = generate_problem_from_input("12,15,8,6,p")
 board = test_problem[0]
 learn_q_values(board)
-print_all_q_values_for_board(board)
+print_optimal_policy_for_all_squares(board)
+# print_all_q_values_for_board(board)

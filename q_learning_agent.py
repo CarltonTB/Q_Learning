@@ -29,17 +29,12 @@ class QLearningAgent:
         if rand <= self.epsilon:
             return self.random_action()
         else:
-            max_q = 0
-            max_key = None
-            for key in self.current_square.q_values.keys():
-                if self.current_square.q_values.get(key) > max_q:
-                    max_q = self.current_square.q_values.get(key)
-                    max_key = key
+            max_action, max_q = get_max_q_and_action(self.current_square)
 
-            if max_key is None:
+            if max_action is None:
                 return self.random_action()
             else:
-                return max_key
+                return max_action
 
     def random_action(self):
         """return a random action:
@@ -94,13 +89,12 @@ class QLearningAgent:
             if action == "EXIT":
                 # update the exit action q value
                 # since there is no next state after exiting,
-                # no need to add the q value of the max q action in the next state
+                # no need to add the q value of the max q action in the next state,
+                # since the next state is the starting state because the episode has ended
                 self.last_square.exit_q_value = (1 - self.learning_rate) * self.last_square.exit_q_value + self.learning_rate * reward
             else:
-                max_q = 0
-                for key in self.current_square.q_values.keys():
-                    if self.current_square.q_values.get(key) > max_q:
-                        max_q = self.current_square.q_values.get(key)
+                max_q_and_action = get_max_q_and_action(self.current_square)
+                max_q = max_q_and_action[1]
                 # check to see if exiting is the max action
                 if self.current_square.exit_q_value > max_q:
                     max_q = self.current_square.exit_q_value
