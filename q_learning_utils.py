@@ -1,5 +1,7 @@
 
 from enum import Enum
+import sys
+import random
 
 # Unicode for the arrow characters
 CONST_DIRECTIONAL_CHARACTERS = {
@@ -47,12 +49,20 @@ def compute_location_from_board_indices(i, j):
 
 
 def get_max_q_and_action(square):
-    max_q = 0
+    max_q = -sys.maxsize-1
     max_action = None
     for key in square.q_values.keys():
         if square.q_values.get(key) > max_q:
             max_q = square.q_values.get(key)
             max_action = key
+    # If there are multiple max actions of the same Q-value, return a random action between all of them
+    max_actions = [max_action]
+    for key in square.q_values.keys():
+        if square.q_values.get(key) == max_q:
+            max_actions.append(key)
+    if len(max_actions) > 1:
+        rand_max_action_index = random.randint(0, len(max_actions)-1)
+        max_action = max_actions[rand_max_action_index]
     return max_action, max_q
 
 

@@ -30,11 +30,7 @@ class QLearningAgent:
             return self.random_action()
         else:
             max_action, max_q = get_max_q_and_action(self.current_square)
-
-            if max_action is None:
-                return self.random_action()
-            else:
-                return max_action
+            return max_action
 
     def random_action(self):
         """return a random action:
