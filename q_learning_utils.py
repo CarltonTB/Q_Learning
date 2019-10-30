@@ -70,15 +70,18 @@ def convert_q_values_for_square_to_string(square):
     """given a square, print the Q-values for each
     action possible from that square"""
     q_value_string = ""
+    q_value_string += "location: " + str(square.location) + "\n"
+    q_value_string += "Q-values:\n"
     if square.type.name == SquareType.GOAL.name or square.type.name == SquareType.FORBIDDEN.name:
         q_value_string += "EXIT "
-        q_value_string += str(square.exit_q_value)
+        q_value_string += str(square.exit_q_value) + "\n"
+    elif square.type.name == SquareType.WALL.name:
+        q_value_string += "WALL (No Q-values)" + "\n"
     else:
         for key in square.q_values.keys():
             q_value_string += CONST_DIRECTIONAL_CHARACTERS[key]
             q_value_string += " "
-            q_value_string += str(square.q_values.get(key))
-            q_value_string += "\n"
+            q_value_string += str(square.q_values.get(key)) + "\n"
 
     return q_value_string
 
@@ -86,8 +89,6 @@ def convert_q_values_for_square_to_string(square):
 def print_all_q_values_for_board(board):
     for row in board:
         for square in row:
-            print("location: " + str(square.location))
-            print("Q-values:")
             print(convert_q_values_for_square_to_string(square))
 
 
@@ -97,6 +98,8 @@ def print_optimal_policy_for_all_squares(board):
         for j in range(0, 4):
             max_action, max_q = get_max_q_and_action(board[i][j])
             if board[i][j].type.name == SquareType.GOAL.name or board[i][j].type.name == SquareType.FORBIDDEN.name:
-                print(str(board[i][j].location) + " " + "EXIT")
+                print(str(board[i][j].location) + " " + "EXIT" + " (" + board[i][j].type.name + ")")
+            elif board[i][j].type.name == SquareType.WALL.name:
+                print(str(board[i][j].location) + " " + "None" + " (" + board[i][j].type.name + ")")
             else:
                 print(str(board[i][j].location) + " " + str(CONST_DIRECTIONAL_CHARACTERS.get(max_action)))

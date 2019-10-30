@@ -51,16 +51,16 @@ class QLearningAgent:
         moved = False
         reward = 0
 
-        if action == "NORTH" and current_indices[0] > 0 and board[new_i-1][new_j].type.name != SquareType.WALL:
+        if action == "NORTH" and current_indices[0] > 0 and board[new_i-1][new_j].type.name != SquareType.WALL.name:
             new_i -= 1
             moved = True
-        elif action == "SOUTH" and current_indices[0] < 3 and board[new_i+1][new_j].type.name != SquareType.WALL:
+        elif action == "SOUTH" and current_indices[0] < 3 and board[new_i+1][new_j].type.name != SquareType.WALL.name:
             new_i += 1
             moved = True
-        elif action == "EAST" and current_indices[1] < 3 and board[new_i][new_j+1].type.name != SquareType.WALL:
+        elif action == "EAST" and current_indices[1] < 3 and board[new_i][new_j+1].type.name != SquareType.WALL.name:
             new_j += 1
             moved = True
-        elif action == "WEST" and current_indices[1] > 0 and board[new_i][new_j-1].type.name != SquareType.WALL:
+        elif action == "WEST" and current_indices[1] > 0 and board[new_i][new_j-1].type.name != SquareType.WALL.name:
             new_j -= 1
             moved = True
         elif action == "EXIT":
@@ -71,8 +71,10 @@ class QLearningAgent:
             self.last_square = self.current_square
             self.current_square = board[3][1]
 
-        # else:
-        #     print("Action is invalid or the agent is unable to move in direction: " + action)
+        else:
+            # print("Action is invalid or the agent is unable to move in direction: " + action)
+            reward += self.living_reward
+            self.last_square = self.current_square
 
         if moved:
             reward += self.living_reward
