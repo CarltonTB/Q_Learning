@@ -10,7 +10,9 @@ def generate_problem_from_input(input_array):
      ['q','11'] = output q-values for each direction at square 11
      ['p'] = output optimal policy for every square"""
     if len(input_array) < 5:
-        print("INVALID INPUT: input was too short")
+        print("INVALID INPUT: not enough arguments passed. please pass at least 5 arguments like the examples given.")
+        print("For example:\n python3 hw3.py 12 15 8 6 q 11")
+        print("or:\n python3 hw3.py 12 15 8 6 p")
         return None
 
     goal1_location = int(input_array[0])

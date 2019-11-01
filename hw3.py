@@ -13,8 +13,8 @@ def main():
         board = problem[0]
         output_type = problem[1]
         learn_q_values(board)
-        print_optimal_policy_on_board(board)
         if len(output_type) == 1 and output_type[0] == "p":
+            print_optimal_policy_on_board(board)
             print_optimal_policy_for_all_squares(board)
         elif len(output_type) == 2 and output_type[0] == "q":
             location = int(output_type[1])
