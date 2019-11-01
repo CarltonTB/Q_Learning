@@ -56,19 +56,19 @@ def learn_q_values(board):
     # Start at the starting square
     agent.current_square = board[3][1]
     print("Agent is learning Q-values...")
-    # TODO: check convergence and stop before 10000 iterations if convergence happens before then
-    for iteration in range(100000):
-        # take an action
+    iterations = 0
+    while iterations < 10000:
+        # take an action and receive reward
         action = agent.get_next_action()
-        # print(action)
-        # print(str(agent.current_square.location))
         reward = agent.take_action(action, board)
         # receive a sample transition and do Q update
         agent.do_q_update(action, reward)
+        iterations += 1
 
 
 # test_problem = generate_problem_from_input("12,15,8,6,p")
 # board = test_problem[0]
 # learn_q_values(board)
+# print_optimal_policy_on_board(board)
 # print_optimal_policy_for_all_squares(board)
 # print_all_q_values_for_board(board)

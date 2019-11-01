@@ -46,7 +46,7 @@ class QLearningTests(unittest.TestCase):
         action = agent.get_next_action()
         self.assertEqual(action, "EAST")
 
-    def test_q_update(self):
+    def test_q_update_for_goal(self):
         agent = QLearningAgent(0.1, 0.1, 0.2, -0.1)
         test_problem = generate_problem_from_input("12,15,8,6,p")
         board = test_problem[0]
@@ -74,12 +74,42 @@ class QLearningTests(unittest.TestCase):
         reward = agent.take_action(action, board)
         agent.do_q_update(action, reward)
         self.assertEqual(100, round(reward, 1))
+        self.assertEqual(round(agent.last_square.exit_q_value, 1), 10.0)
         self.assertEqual(agent.current_square.location, 2)
 
+        # for debugging:
         # exit_q_string = convert_q_values_for_square_to_string(agent.last_square)
         # print(exit_q_string)
         # exit_q_string2 = convert_q_values_for_square_to_string(board[3][1])
         # print(exit_q_string2)
+
+    def test_q_for_forbidden(self):
+        agent = QLearningAgent(0.1, 0.1, 0.2, -0.1)
+        test_problem = generate_problem_from_input("12,15,8,6,p")
+        board = test_problem[0]
+        agent.current_square = board[3][1]
+
+        action = "EAST"
+        reward = agent.take_action(action, board)
+        agent.do_q_update(action, reward)
+        self.assertEqual(-0.1, round(reward, 1))
+
+        action = "EAST"
+        reward = agent.take_action(action, board)
+        agent.do_q_update(action, reward)
+        self.assertEqual(-0.1, round(reward, 1))
+
+        action = "NORTH"
+        reward = agent.take_action(action, board)
+        agent.do_q_update(action, reward)
+        self.assertEqual(-0.1, round(reward, 1))
+
+        action = "EXIT"
+        reward = agent.take_action(action, board)
+        agent.do_q_update(action, reward)
+        self.assertEqual(-100, round(reward, 1))
+        self.assertEqual(round(agent.last_square.exit_q_value, 1), -10.0)
+        self.assertEqual(agent.current_square.location, 2)
 
 
 if __name__ == '__main__':

@@ -51,18 +51,27 @@ def compute_location_from_board_indices(i, j):
 def get_max_q_and_action(square):
     max_q = -sys.maxsize-1
     max_action = None
-    for key in square.q_values.keys():
-        if square.q_values.get(key) > max_q:
-            max_q = square.q_values.get(key)
-            max_action = key
-    # If there are multiple max actions of the same Q-value, return a random action between all of them
-    max_actions = [max_action]
-    for key in square.q_values.keys():
-        if square.q_values.get(key) == max_q:
-            max_actions.append(key)
-    if len(max_actions) > 1:
-        rand_max_action_index = random.randint(0, len(max_actions)-1)
-        max_action = max_actions[rand_max_action_index]
+
+    # If it is a goal or forbidden square, the only possible action is exit
+    # so it must be the max action and q value
+    if square.type.name == SquareType.GOAL.name or square.type.name == SquareType.FORBIDDEN.name:
+        max_action = "EXIT"
+        max_q = square.exit_q_value
+
+    else:
+        for key in square.q_values.keys():
+            if square.q_values.get(key) > max_q:
+                max_q = square.q_values.get(key)
+                max_action = key
+        # If there are multiple max actions of the same Q-value, return a random action between all of them
+        max_actions = [max_action]
+        for key in square.q_values.keys():
+            if square.q_values.get(key) == max_q:
+                max_actions.append(key)
+        if len(max_actions) > 1:
+            rand_max_action_index = random.randint(0, len(max_actions) - 1)
+            max_action = max_actions[rand_max_action_index]
+
     return max_action, max_q
 
 
@@ -74,6 +83,22 @@ def convert_board_to_string(board):
             board_string += "  "
         board_string += "\n"
     return board_string
+
+
+def print_optimal_policy_on_board(board):
+    """Given a board, print out the optimal policy for each sqquare in grid style string
+    so it's easy to verify that the optimal policies make sense"""
+    board_string = ""
+    for row in board:
+        for column in row:
+            if column.type.name == SquareType.GOAL.name or column.type.name == SquareType.FORBIDDEN.name or column.type.name == SquareType.WALL.name:
+                board_string += column.type.value[0]
+            else:
+                max_action, max_q = get_max_q_and_action(column)
+                board_string += str(CONST_DIRECTIONAL_CHARACTERS.get(max_action))
+            board_string += "  "
+        board_string += "\n"
+    print(board_string)
 
 
 def convert_q_values_for_square_to_string(square):
@@ -97,9 +122,9 @@ def convert_q_values_for_square_to_string(square):
 
 
 def print_all_q_values_for_board(board):
-    for row in board:
-        for square in row:
-            print(convert_q_values_for_square_to_string(square))
+    for i in range(3, -1, -1):
+        for j in range(0, 4):
+            print(convert_q_values_for_square_to_string(board[i][j]))
 
 
 def print_optimal_policy_for_all_squares(board):
