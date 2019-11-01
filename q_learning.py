@@ -1,17 +1,14 @@
-# Compute the Q-values for each action in each square and optimal policy given a grid-world input
 # Author: Carlton Brady
 
-from enum import Enum
 from q_learning_agent import *
 from q_learning_utils import *
 
 
-def generate_problem_from_input(input):
+def generate_problem_from_input(input_array):
     """return a 4x4 list that represents the board as well as a list that represents the requested
      output type, for example:
      ['q','11'] = output q-values for each direction at square 11
      ['p'] = output optimal policy for every square"""
-    input_array = input.split(',')
     if len(input_array) < 5:
         print("INVALID INPUT: input was too short")
         return None
@@ -66,9 +63,3 @@ def learn_q_values(board):
         iterations += 1
 
 
-# test_problem = generate_problem_from_input("12,15,8,6,p")
-# board = test_problem[0]
-# learn_q_values(board)
-# print_optimal_policy_on_board(board)
-# print_optimal_policy_for_all_squares(board)
-# print_all_q_values_for_board(board)

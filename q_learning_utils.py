@@ -1,3 +1,4 @@
+# Author: Carlton Brady
 
 from enum import Enum
 import sys
@@ -40,7 +41,8 @@ def compute_board_indices_from_location(location):
         i = 4 - (location // 4)
     else:
         i = 3 - (location // 4)
-    j = (location % 4)-1
+
+    j = (location - (4 * (4 - (i + 1)))) - 1
     return i, j
 
 
@@ -88,6 +90,7 @@ def convert_board_to_string(board):
 def print_optimal_policy_on_board(board):
     """Given a board, print out the optimal policy for each sqquare in grid style string
     so it's easy to verify that the optimal policies make sense"""
+    print("Optimal policy: (grid view)")
     board_string = ""
     for row in board:
         for column in row:
@@ -128,7 +131,7 @@ def print_all_q_values_for_board(board):
 
 
 def print_optimal_policy_for_all_squares(board):
-    print("Pi Star:")
+    print("Optimal policy:")
     for i in range(3, -1, -1):
         for j in range(0, 4):
             max_action, max_q = get_max_q_and_action(board[i][j])

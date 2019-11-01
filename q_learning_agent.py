@@ -1,7 +1,6 @@
 # Agent that takes actions in the grid world to learn q-values
 # Author: Carlton Brady
 
-import random
 from q_learning_utils import *
 
 
@@ -22,12 +21,13 @@ class QLearningAgent:
     def get_next_action(self):
         """Get the next action that the agent should take based on the
         q-values of the current square and random action probability epsilon"""
-        rand = random.random()
-        if rand <= self.epsilon:
-            return self.random_action()
-        else:
-            max_action, max_q = get_max_q_and_action(self.current_square)
-            return max_action
+        max_action, max_q = get_max_q_and_action(self.current_square)
+        if max_action != "EXIT":
+            rand = random.random()
+            if rand <= self.epsilon:
+                return self.random_action()
+
+        return max_action
 
     def random_action(self):
         """return a random action:
@@ -83,13 +83,13 @@ class QLearningAgent:
         Return True if the Q values have converged, which we will define as the Q value
          not changing up to 2 decimal places"""
         if self.last_square is not None:
+
             if action == "EXIT":
                 # update the exit action q value
                 # since there is no next state after exiting,
                 # no need to add the q value of the max q action in the next state,
                 # since the next state is the starting state because the episode has ended
                 self.last_square.exit_q_value = (1 - self.learning_rate) * self.last_square.exit_q_value + self.learning_rate * reward
-
             else:
                 max_q_and_action = get_max_q_and_action(self.current_square)
                 max_q = max_q_and_action[1]
